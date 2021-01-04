@@ -453,7 +453,7 @@ package_filter = None
 # - "3.0.0" was released at 2019-09-12
 #
 # example             | timestamp  | rank | result
-# --------------------|------------|---------------------------------------
+# --------------------|------------|------|--------------------------------
 # rez-env foo         | 2019-09-09 | 0    | foo-2.0.0
 # rez-env foo         | 2019-09-09 | 3    | foo-2.0.1
 # rez-env foo         | 2019-09-09 | 2    | foo-2.1.0
@@ -1061,6 +1061,11 @@ local_styles = None
 implicit_fore = "cyan"
 implicit_back = None
 implicit_styles = None
+
+# Ephemerals
+ephemeral_fore = "blue"
+ephemeral_back = None
+ephemeral_styles = None
 
 # Tool aliases in suites
 alias_fore = "cyan"

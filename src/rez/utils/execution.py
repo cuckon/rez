@@ -6,6 +6,7 @@ from rez.vendor.six import six
 from rez.utils.yaml import dump_yaml
 from rez.vendor.enum import Enum
 from contextlib import contextmanager
+from io import UnsupportedOperation
 import subprocess
 import sys
 import stat
@@ -52,7 +53,10 @@ class Popen(_PopenBase):
         if "stdin" not in kwargs:
             try:
                 file_no = sys.stdin.fileno()
-            except AttributeError:
+            except (
+                AttributeError,
+                UnsupportedOperation  # https://github.com/nerdvegas/rez/pull/966
+            ):
                 file_no = sys.__stdin__.fileno()
 
             if file_no not in (0, 1, 2):
@@ -64,17 +68,18 @@ class Popen(_PopenBase):
         #
         text = kwargs.pop("text", None)
         universal_newlines = kwargs.pop("universal_newlines", None)
+
         if text or universal_newlines:
             kwargs["universal_newlines"] = True
 
-        # fixes py3/cmd.exe UnicodeDecodeError() with some characters.
-        #    UnicodeDecodeError: 'charmap' codec can't decode byte
-        #    0x8d in position 1023172: character maps to <undefined>
-        #
-        # NOTE: currently no solution for `python3+<3.6`
-        #
-        if sys.version_info[:2] >= (3, 6) and "encoding" in kwargs:
-            kwargs['encoding'] = 'utf-8'
+            # fixes py3/cmd.exe UnicodeDecodeError() with some characters.
+            #    UnicodeDecodeError: 'charmap' codec can't decode byte
+            #    0x8d in position 1023172: character maps to <undefined>
+            #
+            # NOTE: currently no solution for `python3+<3.6`
+            #
+            if sys.version_info[:2] >= (3, 6) and "encoding" not in kwargs:
+                kwargs["encoding"] = "utf-8"
 
         super(Popen, self).__init__(args, **kwargs)
 
@@ -128,6 +133,11 @@ def create_executable_script(filepath, body, program=None, py_script_mode=None):
     program = program or "python"
     py_script_mode = py_script_mode or config.create_executable_script_mode
 
+    # https://github.com/nerdvegas/rez/pull/968
+    is_forwarding_script_on_windows = (program == "_rez_fwd"
+                                       and platform_.name == "windows"
+                                       and filepath.lower().endswith(".cmd"))
+
     if callable(body):
         from rez.utils.sourcecode import SourceCode
         code = SourceCode(func=body)
@@ -153,7 +163,16 @@ def create_executable_script(filepath, body, program=None, py_script_mode=None):
     for current_filepath in script_filepaths:
         with open(current_filepath, 'w') as f:
             # TODO: make cross platform
-            f.write("#!/usr/bin/env %s\n" % program)
+            if is_forwarding_script_on_windows:
+                # following lines of batch script will be stripped
+                # before yaml.load
+                f.write("@echo off\n")
+                f.write("%s.exe %%~dpnx0 %%*\n" % program)
+                f.write("goto :eof\n")  # skip YAML body
+                f.write(":: YAML\n")    # comment for human
+            else:
+                f.write("#!/usr/bin/env %s\n" % program)
+
             f.write(body)
 
         # TODO: Although Windows supports os.chmod you can only set the readonly
@@ -212,6 +231,12 @@ def create_forwarding_script(filepath, module, func_name, *nargs, **kwargs):
     is used internally by Rez to dynamically create a script that uses Rez,
     even though the parent environment may not be configured to do so.
     """
+    from rez.utils.platform_ import platform_
+
+    if (platform_.name == "windows"
+            and os.path.splitext(filepath)[-1].lower() != ".cmd"):
+        filepath += ".cmd"
+
     doc = dict(
         module=module,
         func_name=func_name)

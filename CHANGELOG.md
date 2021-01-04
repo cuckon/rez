@@ -1,5 +1,231 @@
 # Change Log
 
+## 2.71.0 (2020-12-29)
+[Source](https://github.com/nerdvegas/rez/tree/2.71.0) | [Diff](https://github.com/nerdvegas/rez/compare/2.70.5...2.71.0)
+
+**Notes**
+
+[Ephemeral packages](https://github.com/nerdvegas/rez/wiki/Ephemeral-Packages) are a major new feature. These
+enable dependencies on abstract objects or machine capabilities (for example), and also act as a way to pass
+'options' to packages that can alter their behaviour. These will also form the basis for _package features_, an
+upcoming feature that will allow packages to depend on _features_ of other packages, rather than just their
+version number.
+
+**Merged pull requests:**
+
+- Ephemeral packages [\#993](https://github.com/nerdvegas/rez/pull/993) ([nerdvegas](https://github.com/nerdvegas))
+
+## 2.70.5 (2020-12-29)
+[Source](https://github.com/nerdvegas/rez/tree/2.70.5) | [Diff](https://github.com/nerdvegas/rez/compare/2.70.4...2.70.5)
+
+**Merged pull requests:**
+
+- Fix module 'Qt.QtWidgets' has no attribute'QPainter' [\#992](https://github.com/nerdvegas/rez/pull/992) ([loonghao](https://github.com/loonghao))
+
+## 2.70.4 (2020-12-29)
+[Source](https://github.com/nerdvegas/rez/tree/2.70.4) | [Diff](https://github.com/nerdvegas/rez/compare/2.70.3...2.70.4)
+
+**Merged pull requests:**
+
+- update open_file_for_write with simplified error handling [\#998](https://github.com/nerdvegas/rez/pull/998) ([nerdvegas](https://github.com/nerdvegas))
+
+**Closed issues:**
+
+- 'rez build --install --prefix' error  [\#858](https://github.com/nerdvegas/rez/issues/858)
+
+## 2.70.3 (2020-12-29)
+[Source](https://github.com/nerdvegas/rez/tree/2.70.3) | [Diff](https://github.com/nerdvegas/rez/compare/2.70.2...2.70.3)
+
+**Merged pull requests:**
+
+- Fix no CLI args passed into forward script on Windows [\#990](https://github.com/nerdvegas/rez/pull/990) ([davidlatwe](https://github.com/davidlatwe))
+
+## 2.70.2 (2020-12-29)
+[Source](https://github.com/nerdvegas/rez/tree/2.70.2) | [Diff](https://github.com/nerdvegas/rez/compare/2.70.1...2.70.2)
+
+**Merged pull requests:**
+
+- fix: exit file write retry loop after successfull write [\#989](https://github.com/nerdvegas/rez/pull/989) ([bpabel](https://github.com/bpabel))
+
+## 2.70.1 (2020-12-29)
+[Source](https://github.com/nerdvegas/rez/tree/2.70.1) | [Diff](https://github.com/nerdvegas/rez/compare/2.70.0...2.70.1)
+
+**Merged pull requests:**
+
+- Fixes release hook for Python 3 [\#981](https://github.com/nerdvegas/rez/pull/981) ([bfloch](https://github.com/bfloch))
+
+## 2.70.0 (2020-12-29)
+[Source](https://github.com/nerdvegas/rez/tree/2.70.0) | [Diff](https://github.com/nerdvegas/rez/compare/2.69.7...2.70.0)
+
+**Backwards Compatibility Issues**
+
+This release **removes the bez build system**. This was a very simple build system that does nothing more
+than call a function in `rezbuild.py`, passing it some build attributes (such as installation path). It has
+been removed because you can achieve the same thing using a custom build command, and you can retrieve the
+build attributes from environment variables instead.
+
+If you attempt to build a package that was previously using bez (ie, the `rezbuild.py` script is still there,
+and `build_command` is not specified in your package.py) then the resulting error message shows you what you
+need to do to port your existing build script.
+
+**Merged pull requests:**
+
+- Remove bez [\#979](https://github.com/nerdvegas/rez/pull/979) ([nerdvegas](https://github.com/nerdvegas))
+
+## 2.69.7 (2020-12-22)
+[Source](https://github.com/nerdvegas/rez/tree/2.69.7) | [Diff](https://github.com/nerdvegas/rez/compare/2.69.6...2.69.7)
+
+**Merged pull requests:**
+
+- Issue 994 wiki workflow fixes [\#995](https://github.com/nerdvegas/rez/pull/995) ([nerdvegas](https://github.com/nerdvegas))
+
+**Closed issues:**
+
+- wiki workflow broken [\#994](https://github.com/nerdvegas/rez/issues/994)
+
+## 2.69.6 (2020-11-24)
+[Source](https://github.com/nerdvegas/rez/tree/2.69.6) | [Diff](https://github.com/nerdvegas/rez/compare/2.69.5...2.69.6)
+
+**Merged pull requests:**
+
+- avoid using fileConfig to init logging, as it overwrites root logger [\#978](https://github.com/nerdvegas/rez/pull/978) ([nerdvegas](https://github.com/nerdvegas))
+
+**Closed issues:**
+
+- rez overwrites root logger [\#977](https://github.com/nerdvegas/rez/issues/977)
+
+## 2.69.5 (2020-11-19)
+[Source](https://github.com/nerdvegas/rez/tree/2.69.5) | [Diff](https://github.com/nerdvegas/rez/compare/2.69.4...2.69.5)
+
+**Merged pull requests:**
+
+- Try telling who is/are requesting missing package [\#976](https://github.com/nerdvegas/rez/pull/976) ([davidlatwe](https://github.com/davidlatwe))
+
+## 2.69.4 (2020-11-17)
+[Source](https://github.com/nerdvegas/rez/tree/2.69.4) | [Diff](https://github.com/nerdvegas/rez/compare/2.69.3...2.69.4)
+
+**Merged pull requests:**
+
+- Fix pip.py get purelib error. [\#973](https://github.com/nerdvegas/rez/pull/973) ([zclongpop123](https://github.com/zclongpop123))
+
+## 2.69.3 (2020-11-17)
+[Source](https://github.com/nerdvegas/rez/tree/2.69.3) | [Diff](https://github.com/nerdvegas/rez/compare/2.69.2...2.69.3)
+
+**Merged pull requests:**
+
+- handling QFileDialog.getSaveFileName return type [\#963](https://github.com/nerdvegas/rez/pull/963) ([sparklabor](https://github.com/sparklabor))
+
+**Closed issues:**
+
+- QFileDialog.getSaveFileName and getOpenFileName return tuple not str [\#962](https://github.com/nerdvegas/rez/issues/962)
+
+## 2.69.2 (2020-11-17)
+[Source](https://github.com/nerdvegas/rez/tree/2.69.2) | [Diff](https://github.com/nerdvegas/rez/compare/2.69.1...2.69.2)
+
+**Merged pull requests:**
+
+- 965| Fix io.UnsupportedOperation [\#966](https://github.com/nerdvegas/rez/pull/966) ([spsalefeve](https://github.com/spsalefeve))
+
+**Closed issues:**
+
+- io.UnsupportedOperation when using rez api with pytest [\#965](https://github.com/nerdvegas/rez/issues/965)
+
+## 2.69.1 (2020-11-17)
+[Source](https://github.com/nerdvegas/rez/tree/2.69.1) | [Diff](https://github.com/nerdvegas/rez/compare/2.69.0...2.69.1)
+
+**Merged pull requests:**
+
+- Update vendored pydot (1.4.2.dev0) [\#970](https://github.com/nerdvegas/rez/pull/970) ([davidlatwe](https://github.com/davidlatwe))
+
+## 2.69.0 (2020-11-17)
+[Source](https://github.com/nerdvegas/rez/tree/2.69.0) | [Diff](https://github.com/nerdvegas/rez/compare/2.68.5...2.69.0)
+
+**Merged pull requests:**
+
+- Fix forwarding script on Windows (suite supporting) [\#968](https://github.com/nerdvegas/rez/pull/968) ([davidlatwe](https://github.com/davidlatwe))
+
+## 2.68.5 (2020-10-06)
+[Source](https://github.com/nerdvegas/rez/tree/2.68.5) | [Diff](https://github.com/nerdvegas/rez/compare/2.68.4...2.68.5)
+
+**Merged pull requests:**
+
+- Handling build/install directory remove error in build process [\#959](https://github.com/nerdvegas/rez/pull/959) ([davidlatwe](https://github.com/davidlatwe))
+
+## 2.68.4 (2020-10-06)
+[Source](https://github.com/nerdvegas/rez/tree/2.68.4) | [Diff](https://github.com/nerdvegas/rez/compare/2.68.3...2.68.4)
+
+**Merged pull requests:**
+
+- Support rez-env -c <alias> or -- <alias> (Windows CMD shell) [\#948](https://github.com/nerdvegas/rez/pull/948) ([davidlatwe](https://github.com/davidlatwe))
+
+**Closed issues:**
+
+- Alias can't be used on the same line as rez-env [\#708](https://github.com/nerdvegas/rez/issues/708)
+
+## 2.68.3 (2020-09-22)
+[Source](https://github.com/nerdvegas/rez/tree/2.68.3) | [Diff](https://github.com/nerdvegas/rez/compare/2.68.0...2.68.3)
+
+**Merged pull requests:**
+
+- fix regression wrt unicode, subprocess [\#961](https://github.com/nerdvegas/rez/pull/961) ([nerdvegas](https://github.com/nerdvegas))
+
+- Fix unicode vcs changelog encode err [\#956](https://github.com/nerdvegas/rez/pull/956) ([davidlatwe](https://github.com/davidlatwe))
+
+- Fix repo location false mismatch [\#957](https://github.com/nerdvegas/rez/pull/957) ([davidlatwe](https://github.com/davidlatwe))
+
+## 2.68.0 (2020-09-22)
+[Source](https://github.com/nerdvegas/rez/tree/2.68.0) | [Diff](https://github.com/nerdvegas/rez/compare/2.67.1...2.68.0)
+
+**Backwards Compatibility Issues**
+
+Note that this release changes OS detection on linux. The results _should_ be the same, but if they
+do differ, and you need to retain the same OS name (which you probably will, because you'll have
+packages that depend on the analogous implicit package), then you can use the
+[platform_map](https://github.com/nerdvegas/rez/wiki/Configuring-Rez#platform_map) setting.
+
+**Merged pull requests:**
+
+- Replace platform.linux_distribution by distro [\#954](https://github.com/nerdvegas/rez/pull/954) ([predat](https://github.com/predat))
+
+**Closed issues:**
+
+- rez platform_ broken with python3.8 [\#883](https://github.com/nerdvegas/rez/issues/883)
+
+## 2.67.1 (2020-09-11)
+[Source](https://github.com/nerdvegas/rez/tree/2.67.1) | [Diff](https://github.com/nerdvegas/rez/compare/2.67.0...2.67.1)
+
+**Merged pull requests:**
+
+- made this.root visible to pkg preprocessor [\#953](https://github.com/nerdvegas/rez/pull/953) ([nerdvegas](https://github.com/nerdvegas))
+
+**Closed issues:**
+
+- this.root is None in package preprocessor [\#952](https://github.com/nerdvegas/rez/issues/952)
+
+## 2.67.0 (2020-08-25)
+[Source](https://github.com/nerdvegas/rez/tree/2.67.0) | [Diff](https://github.com/nerdvegas/rez/compare/2.66.1...2.67.0)
+
+**Merged pull requests:**
+
+- Ninja support [\#940](https://github.com/nerdvegas/rez/pull/940) ([bareya](https://github.com/bareya))
+- print warning once if pkg cache dir not present [\#942](https://github.com/nerdvegas/rez/pull/942) ([nerdvegas](https://github.com/nerdvegas))
+
+**Closed issues:**
+
+- don't raise on missing package cache dir [\#941](https://github.com/nerdvegas/rez/issues/941)
+
+## 2.66.1 (2020-08-25)
+[Source](https://github.com/nerdvegas/rez/tree/2.66.1) | [Diff](https://github.com/nerdvegas/rez/compare/2.66.0...2.66.1)
+
+**Merged pull requests:**
+
+- Fix #934, no hash string in include script file name [\#935](https://github.com/nerdvegas/rez/pull/935) ([davidlatwe](https://github.com/davidlatwe))
+- Raise unversioned error when config not allowed [\#938](https://github.com/nerdvegas/rez/pull/938) ([davidlatwe](https://github.com/davidlatwe))
+
+**Closed issues:**
+
+- Installed package not including latest module [\#934](https://github.com/nerdvegas/rez/issues/934)
+
 ## 2.66.0 (2020-08-11)
 [Source](https://github.com/nerdvegas/rez/tree/2.66.0) | [Diff](https://github.com/nerdvegas/rez/compare/2.65.0...2.66.0)
 

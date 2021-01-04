@@ -11,7 +11,7 @@ from rez.utils.logging_ import print_warning
 from rez.utils.base26 import create_unique_base26_symlink
 from rez.utils.colorize import Printer, warning
 from rez.utils.filesystem import safe_makedirs, copy_or_replace, \
-    make_path_writable, get_existing_path
+    make_path_writable, get_existing_path, forceful_rmtree
 from rez.utils.sourcecode import IncludeModuleManager
 from rez.utils.filesystem import TempDirs
 from rez.package_test import PackageTestRunner, PackageTestResults
@@ -142,7 +142,7 @@ class LocalBuildProcess(BuildProcessHelper):
 
         # create directories (build, install)
         if clean and os.path.exists(variant_build_path):
-            shutil.rmtree(variant_build_path)
+            self._rmtree(variant_build_path)
 
         safe_makedirs(variant_build_path)
 
@@ -297,16 +297,18 @@ class LocalBuildProcess(BuildProcessHelper):
 
             with open(filepath, "rb") as f:
                 txt = f.read().strip()
-
             uuid = sha1(txt).hexdigest()
-            dest_filepath = os.path.join(path, "%s-%s.py" % (name, uuid))
 
-            if not os.path.exists(dest_filepath):
-                shutil.copy(filepath, dest_filepath)
+            dest_filepath = os.path.join(path, "%s.py" % name)
+            shutil.copy(filepath, dest_filepath)  # overwrite if exists
+
+            sha1_filepath = os.path.join(path, "%s.sha1" % name)
+            with open(sha1_filepath, "w") as f:  # overwrite if exists
+                f.write(uuid)
 
     def _rmtree(self, path):
         try:
-            shutil.rmtree(path)
+            forceful_rmtree(path)
         except Exception as e:
             print_warning("Failed to delete %s - %s", path, e)
 

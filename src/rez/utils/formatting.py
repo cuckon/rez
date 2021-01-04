@@ -54,6 +54,11 @@ def is_valid_package_name(name, raise_error=False):
 class PackageRequest(Requirement):
     """A package request parser.
 
+    Valid requests include:
+
+    * Any standard request, eg 'foo-1.2.3', '!foo-1', etc
+    * "Ephemeral" request, eg '.foo-1.2.3'
+
     Example:
 
         >>> pr = PackageRequest("foo-1.3+")
@@ -62,7 +67,14 @@ class PackageRequest(Requirement):
     """
     def __init__(self, s):
         super(PackageRequest, self).__init__(s)
-        is_valid_package_name(self.name, True)
+
+        # detect ephemeral package
+        if s.startswith('.'):
+            self.ephemeral = True
+            is_valid_package_name(self.name[1:], True)
+        else:
+            self.ephemeral = False
+            is_valid_package_name(self.name, True)
 
 
 class StringFormatType(Enum):
@@ -492,7 +504,7 @@ def as_block_string(txt):
 
     lines = []
     for line in txt.split('\n'):
-        line_ = json.dumps(line)
+        line_ = json.dumps(line, ensure_ascii=False)
         line_ = line_[1:-1].rstrip()  # drop double quotes
         lines.append(line_)
 

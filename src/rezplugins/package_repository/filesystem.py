@@ -601,6 +601,34 @@ class FileSystemPackageRepository(PackageRepository):
 
         return None
 
+    def get_resource_from_handle(self, resource_handle, verify_repo=True):
+        if verify_repo:
+            repository_type = resource_handle.variables.get("repository_type")
+            location = resource_handle.variables.get("location")
+
+            if repository_type != self.name():
+                raise ResourceError("repository_type mismatch - requested %r, "
+                                    "repository_type is %r"
+                                    % (repository_type, self.name()))
+
+            # It appears that sometimes, the handle location can differ to the
+            # repo location even though they are the same path (different
+            # mounts). We account for that here.
+            #
+            # https://github.com/nerdvegas/rez/pull/957
+            #
+            if location != self.location:
+                location = canonical_path(location, platform_)
+
+            if location != self.location:
+                raise ResourceError("location mismatch - requested %r, "
+                                    "repository location is %r "
+                                    % (location, self.location))
+
+        resource = self.pool.get_resource_from_handle(resource_handle)
+        resource._repository = self
+        return resource
+
     @cached_property
     def file_lock_dir(self):
         dirname = _settings.file_lock_dir
@@ -1180,6 +1208,12 @@ class FileSystemPackageRepository(PackageRepository):
 
         # format version is always set
         package_data["format_version"] = format_version
+
+        # Stop if package is unversioned and config does not allow that
+        if (not package_data["version"]
+                and not config.allow_unversioned_packages):
+            raise PackageMetadataError("Unversioned package is not allowed "
+                                       "in current configuration.")
 
         # write out new package definition file
         package_file = ".".join([package_filename, package_extension])
